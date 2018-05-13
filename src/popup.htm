@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<title>tabclip</title>
+
+		<style type="text/css">
+			body {
+				min-width: 225px;
+				padding: 10px;
+			}
+			#alert {
+				color: rgb(40, 167, 69);
+				padding-top: 10px;
+				line-height: 24px;
+				vertical-align: middle;
+				display: none;
+			}
+			#alert.show {
+				display: block;
+				animation: pulse 3s;
+			}
+			@keyframes pulse {
+				0% { opacity: 0; }
+				20% { opacity: 1; }
+				80% { opacity: 1; }
+				100% { opacity: 0; }
+			}
+		</style>
+
+		<script src="./fonts.bundle.js"></script>
+
+	</head>
+	<body>
+
+		<form>
+			Window(s):&nbsp;
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="copyScope" id="currentWindow" value="current" checked>
+				<label class="form-check-label" for="currentWindow">Current</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="copyScope" id="allWindows" value="all">
+				<label class="form-check-label" for="allWindows">All</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="includeTitles" id="includeTitles">
+				<label class="form-check-label" for="includeTitles">Include titles</label>
+			</div>
+			<br />
+			<button type="button" class="btn btn-primary" id="copyButton"><i class="fas fa-copy"></i>&nbsp;Copy</button>
+			<br />
+			<hr />
+			<button type="button" class="btn btn-primary" id="pasteButton"><i class="fas fa-paste"></i>&nbsp;Paste</button>
+			<span id="alert"></span>
+		</form>
+
+		<script src="./main.bundle.js"></script>
+
+	</body>
+</html>

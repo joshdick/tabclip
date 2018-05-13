@@ -1,0 +1,23 @@
+{
+	"manifest_version": 2,
+	"name": "tabclip",
+	"description": "Copy browser tabs to (or create them from) your clipboard.",
+	"version": "1.0.0",
+	"author": "Josh Dick",
+	"icons": {
+		"16": "img/tabclip_16.png",
+		"32": "img/tabclip_32.png",
+		"48": "img/tabclip_48.png",
+		"128": "img/tabclip_128.png"
+	},
+	"homepage_url": "https://joshdick.github.io/tabclip",
+	"browser_action": {
+		"default_icon": "img/tabclip_128.png",
+		"default_popup": "popup.htm",
+		"default_title": "tabclip"
+	},
+	"permissions": [
+		"clipboardRead", "clipboardWrite", "tabs"
+	],
+	"content_security_policy": "script-src 'self'; object-src 'self'"
+}
