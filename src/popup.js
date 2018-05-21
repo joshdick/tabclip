@@ -1,5 +1,14 @@
 const getUrls = require('get-urls')
 
+// Options for [normalize-url](https://github.com/sindresorhus/normalize-url)
+// passed through by [get-urls](https://github.com/sindresorhus/get-urls)
+const NORMALIZE_URL_OPTIONS = Object.freeze({
+	removeTrailingSlash: false,
+	sortQueryParameters: false,
+	stripFragment: false,
+	stripWWW: false
+})
+
 const copyButton = document.querySelector('#copyButton')
 const pasteButton = document.querySelector('#pasteButton')
 const alert = document.querySelector('#alert')
@@ -99,7 +108,7 @@ copyButton.onclick = () => {
 
 pasteButton.onclick = () => {
 	const input = readClipboard()
-	const urls = getUrls(input)
+	const urls = getUrls(input, NORMALIZE_URL_OPTIONS)
 	for (const url of urls) {
 		browser.tabs.create({ url })
 	}
