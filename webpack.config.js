@@ -20,8 +20,9 @@ const zipPluginConfig = {
 module.exports = {
 	mode: 'production',
 	entry: {
+		background: './src/background.js',
 		fonts: './src/fonts.js',
-		main: './src/main.js',
+		popup: './src/popup.js',
 	},
 	output: {
 		filename: '[name].bundle.js',

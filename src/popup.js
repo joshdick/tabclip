@@ -1,57 +1,29 @@
-const getUrls = require('get-urls')
+require('bootstrap-css-only/css/bootstrap.min.css')
 
-// Options for [normalize-url](https://github.com/sindresorhus/normalize-url)
-// passed through by [get-urls](https://github.com/sindresorhus/get-urls)
-const NORMALIZE_URL_OPTIONS = Object.freeze({
-	removeTrailingSlash: false,
-	sortQueryParameters: false,
-	stripFragment: false,
-	stripWWW: false
-})
+const shared = require('./shared')
 
+const alert = document.querySelector('#alert')
 const copyButton = document.querySelector('#copyButton')
 const pasteButton = document.querySelector('#pasteButton')
-const alert = document.querySelector('#alert')
+const currentWindowRadio = document.querySelector('#currentWindow')
+const allWindowsRadio = document.querySelector('#allWindows')
+const includeTitlesCheckbox = document.querySelector('#includeTitles')
 
-const copyToClipboard = (text) => {
-	const copyDiv = document.createElement('div')
-	copyDiv.contentEditable = true
-	copyDiv.setAttribute('style', 'white-space: pre; position: absolute; top: 10000px;') // preserve line breaks and prevent UI reflows
-	document.body.appendChild(copyDiv)
-	copyDiv.innerText = text
-	copyDiv.unselectable = 'off'
-	copyDiv.focus()
-	document.execCommand('SelectAll')
-	document.execCommand('Copy', false, null)
-	document.body.removeChild(copyDiv)
-}
-
-const readClipboard = () => {
-	const pasteDiv = document.createElement('div')
-	pasteDiv.contentEditable = true
-	pasteDiv.setAttribute('style', 'white-space: pre; position: absolute; top: 10000px;') // preserve line breaks and prevent UI reflows
-	document.body.appendChild(pasteDiv)
-	pasteDiv.unselectable = 'off'
-	pasteDiv.focus()
-	document.execCommand('SelectAll')
-	document.execCommand('Paste', false, null)
-	const result = pasteDiv.innerText
-	document.body.removeChild(pasteDiv)
-	return result
-}
-
-const ALERT_OPERATIONS = Object.freeze({
-	COPY: Symbol('copy'),
-	PASTE: Symbol('paste')
+currentWindowRadio.onclick = (e) => shared.savePref(shared.PREFERENCE_NAMES.COPY_SCOPE, e.target.id)
+allWindowsRadio.onclick = (e) => shared.savePref(shared.PREFERENCE_NAMES.COPY_SCOPE, e.target.id)
+includeTitlesCheckbox.onclick = (e) => shared.savePref(shared.PREFERENCE_NAMES.INCLUDE_TITLES, e.target.checked)
+shared.getPrefs().then(({ copyScope, includeTitles }) => {
+	document.querySelector(`#${copyScope}`).checked = true
+	includeTitlesCheckbox.checked = includeTitles
 })
 
 const showAlert = (quantity, operation) => {
 	let verb
 	switch (operation) {
-	case ALERT_OPERATIONS.COPY:
+	case shared.ALERT_OPERATIONS.COPY:
 		verb = 'Copied'
 		break
-	case ALERT_OPERATIONS.PASTE:
+	case shared.ALERT_OPERATIONS.PASTE:
 		verb = 'Pasted'
 		break
 	}
@@ -67,50 +39,15 @@ const showAlert = (quantity, operation) => {
 copyButton.onclick = () => {
 	const currentWindow = document.querySelector('input[name="copyScope"]:checked').value === 'current'
 	const includeTitles = document.querySelector('#includeTitles').checked
-	let copyOperation
-	if (currentWindow) {
-		copyOperation = () => browser.tabs.query({ currentWindow }).then((tabs) => {
-			const output = tabs.map(tab => {
-				const title = includeTitles ? ` | ${tab.title}` : ''
-				return `${tab.url}${title}`
-			}).join('\n') // Combine all tabs for this window into a string, one URL per line
-			copyToClipboard(output)
-			return tabs.length
+	shared.copyTabs(currentWindow, includeTitles)
+		.then(tabCount => {
+			showAlert(tabCount, shared.ALERT_OPERATIONS.COPY)
 		})
-	} else {
-		let tabsByWindow = [] // Array of arrays where each inner array corresponds to the tabs in a given window
-		let tabCount = 0
-		copyOperation = () => browser.windows.getAll({ populate: true }).then((windows) => {
-			for (const window of windows) {
-				const tabs = []
-				for (const tab of window.tabs) {
-					tabs.push(tab)
-					tabCount += 1
-				}
-				tabsByWindow.push(tabs)
-			}
-			const output =
-				tabsByWindow.map(
-					tabs => tabs.map(tab => {
-						const title = includeTitles ? ` | ${tab.title}` : ''
-						return `${tab.url}${title}`
-					}).join('\n') // Combine all tabs for one window into a string, one URL per line
-				)
-					.join('\n\n') // Combine each window's URL list, separating each list with an empty line
-			copyToClipboard(output)
-			return tabCount
-		})
-	}
-	copyOperation().then(tabCount => {
-		showAlert(tabCount, ALERT_OPERATIONS.COPY)
-	})
 }
 
 pasteButton.onclick = () => {
-	const input = readClipboard()
-	const urls = getUrls(input, NORMALIZE_URL_OPTIONS)
-	for (const url of urls) {
-		browser.tabs.create({ url })
-	}
-	showAlert(urls.size, ALERT_OPERATIONS.PASTE)
+	shared.pasteTabs()
+		.then(tabCount => {
+			showAlert(tabCount, shared.ALERT_OPERATIONS.PASTE)
+		})
 }
