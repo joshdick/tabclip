@@ -14,7 +14,7 @@ const showNotification = (quantity, operation) => {
 	})
 }
 
-browser.commands.onCommand.addListener((command) => {
+const commandListener = (command) => {
 	if (command === 'copy-tabs') {
 		shared.getPrefs().then(({ copyScope, includeTitles }) => {
 			shared.copyTabs(copyScope === 'currentWindow', includeTitles)
@@ -28,5 +28,8 @@ browser.commands.onCommand.addListener((command) => {
 				showNotification(tabCount, shared.ALERT_OPERATIONS.PASTE)
 			})
 	}
-})
+}
 
+if (!browser.commands.onCommand.hasListener(commandListener)) {
+	browser.commands.onCommand.addListener(commandListener)
+}

@@ -1,6 +1,9 @@
 const getUrls = require('get-urls')
 const browser = require('webextension-polyfill')
 
+const clipboardBridge = document.querySelector('#clipboardBridge')
+clipboardBridge.contentEditable = true
+
 // Options for [normalize-url](https://github.com/sindresorhus/normalize-url)
 // passed through by [get-urls](https://github.com/sindresorhus/get-urls)
 const NORMALIZE_URL_OPTIONS = Object.freeze({
@@ -16,30 +19,20 @@ const ALERT_OPERATIONS = Object.freeze({
 })
 
 const readFromClipboard = () => {
-	const pasteDiv = document.createElement('div')
-	pasteDiv.contentEditable = true
-	pasteDiv.setAttribute('style', 'white-space: pre; position: absolute; top: 10000px;') // preserve line breaks and prevent UI reflows
-	document.body.appendChild(pasteDiv)
-	pasteDiv.unselectable = 'off'
-	pasteDiv.focus()
-	document.execCommand('SelectAll')
-	document.execCommand('Paste', false, null)
-	const result = pasteDiv.innerText
-	document.body.removeChild(pasteDiv)
+	clipboardBridge.focus()
+	document.execCommand('selectAll')
+	document.execCommand('paste')
+	const result = clipboardBridge.innerText
+	clipboardBridge.innerText = ''
 	return result
 }
 
 const writeToClipboard = (text) => {
-	const copyDiv = document.createElement('div')
-	copyDiv.contentEditable = true
-	copyDiv.setAttribute('style', 'white-space: pre; position: absolute; top: 10000px;') // preserve line breaks and prevent UI reflows
-	document.body.appendChild(copyDiv)
-	copyDiv.innerText = text
-	copyDiv.unselectable = 'off'
-	copyDiv.focus()
-	document.execCommand('SelectAll')
-	document.execCommand('Copy', false, null)
-	document.body.removeChild(copyDiv)
+	clipboardBridge.innerText = text
+	clipboardBridge.focus()
+	document.execCommand('selectAll')
+	document.execCommand('copy')
+	clipboardBridge.innerText = ''
 }
 
 const copyTabs = (currentWindow, includeTitles) => {

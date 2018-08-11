@@ -16,6 +16,9 @@
 		"default_popup": "popup.htm",
 		"default_title": "tabclip"
 	},
+	"background": {
+		"page": "background.htm"
+	},
 	"commands": {
 		"copy-tabs": {
 			"suggested_key": {
@@ -31,9 +34,6 @@
 			},
 			"description": "Paste tab(s) from the clipboard"
 		}
-	},
-	"background": {
-		"scripts": ["background.bundle.js"]
 	},
 	"permissions": [
 		"clipboardRead", "clipboardWrite", "notifications", "storage", "tabs"
