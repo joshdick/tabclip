@@ -33,6 +33,11 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
+      # run tests
       - run: npm test
 
+      # build extension archive
+      - run: npx webpack
+      
+      - store_artifacts:
+          path: dist/tabclip.zip
