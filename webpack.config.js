@@ -18,10 +18,15 @@ const zipPluginConfig = {
 }
 
 module.exports = {
+	/*
+	mode: 'development',
+	devtool: 'cheap-module-source-map',
+	*/
 	mode: 'production',
 	entry: {
+		background: './src/background.js',
 		fonts: './src/fonts.js',
-		main: './src/main.js',
+		popup: './src/popup.js',
 	},
 	output: {
 		filename: '[name].bundle.js',

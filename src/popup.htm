@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 
@@ -11,6 +11,10 @@
 			body {
 				min-width: 225px;
 				padding: 10px;
+			}
+			#clipboardBridge {
+				position: absolute;
+				top: -1000px;
 			}
 			#alert {
 				color: rgb(40, 167, 69);
@@ -35,6 +39,8 @@
 
 	</head>
 	<body>
+
+		<div id="clipboardBridge"></div>
 
 		<form>
 			Window(s):&nbsp;
@@ -63,7 +69,7 @@
 			<span id="alert"></span>
 		</form>
 
-		<script src="./main.bundle.js"></script>
+		<script src="./popup.bundle.js"></script>
 
 	</body>
 </html>

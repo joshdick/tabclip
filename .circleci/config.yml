@@ -38,6 +38,6 @@ jobs:
 
       # build extension archive
       - run: npx webpack
-      
+
       - store_artifacts:
           path: dist/tabclip.zip
