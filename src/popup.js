@@ -11,7 +11,20 @@ const NORMALIZE_URL_OPTIONS = Object.freeze({
 
 const copyButton = document.querySelector('#copyButton')
 const pasteButton = document.querySelector('#pasteButton')
+const includeTitlesCheckbox = document.querySelector('#includeTitles')
+const backgroundPasteCheckbox = document.querySelector('#backgroundPaste')
 const alert = document.querySelector('#alert')
+
+// Waiting for DOMContentLoaded allows webextension-polyfill to load
+document.addEventListener('DOMContentLoaded', () => {
+	browser.storage.local.get(['copyScope', 'includeTitles', 'backgroundPaste'])
+		.then(({ copyScope, includeTitles, backgroundPaste }) => {
+			console.log(copyScope, includeTitles, backgroundPaste)
+			if (copyScope) document.querySelector(`#${copyScope}`).checked = true
+			includeTitlesCheckbox.checked = !!includeTitles
+			backgroundPasteCheckbox.checked = !!backgroundPaste
+		})
+})
 
 const copyToClipboard = (text) => {
 	const copyDiv = document.createElement('div')
@@ -107,10 +120,30 @@ copyButton.onclick = () => {
 }
 
 pasteButton.onclick = () => {
+	const backgroundPaste = backgroundPasteCheckbox.checked
 	const input = readClipboard()
 	const urls = getUrls(input, NORMALIZE_URL_OPTIONS)
 	for (const url of urls) {
-		browser.tabs.create({ url })
+		browser.tabs.create({ url, active: !backgroundPaste })
 	}
 	showAlert(urls.size, ALERT_OPERATIONS.PASTE)
 }
+
+backgroundPasteCheckbox.onchange = () => {
+	browser.storage.local.set({
+		backgroundPaste: backgroundPasteCheckbox.checked
+	})
+}
+
+includeTitlesCheckbox.onchange = () => {
+	browser.storage.local.set({
+		includeTitles: includeTitlesCheckbox.checked
+	})
+}
+
+document.querySelectorAll('input[name="copyScope"]')
+	.forEach(radioButton => radioButton.onchange = (event) => {
+		browser.storage.local.set({
+			copyScope: event.target.id
+		})
+	})
