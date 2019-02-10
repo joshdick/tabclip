@@ -1,13 +1,4 @@
-const getUrls = require('get-urls')
-
-// Options for [normalize-url](https://github.com/sindresorhus/normalize-url)
-// passed through by [get-urls](https://github.com/sindresorhus/get-urls)
-const NORMALIZE_URL_OPTIONS = Object.freeze({
-	removeTrailingSlash: false,
-	sortQueryParameters: false,
-	stripFragment: false,
-	stripWWW: false
-})
+const urlRegex = require('url-regex')
 
 const copyButton = document.querySelector('#copyButton')
 const pasteButton = document.querySelector('#pasteButton')
@@ -122,11 +113,11 @@ copyButton.onclick = () => {
 pasteButton.onclick = () => {
 	const backgroundPaste = backgroundPasteCheckbox.checked
 	const input = readClipboard()
-	const urls = getUrls(input, NORMALIZE_URL_OPTIONS)
+	const urls = input.match(urlRegex())
 	for (const url of urls) {
 		browser.tabs.create({ url, active: !backgroundPaste })
 	}
-	showAlert(urls.size, ALERT_OPERATIONS.PASTE)
+	showAlert(urls.length, ALERT_OPERATIONS.PASTE)
 }
 
 backgroundPasteCheckbox.onchange = () => {
