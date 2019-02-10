@@ -18,6 +18,10 @@ const zipPluginConfig = {
 }
 
 module.exports = {
+	/*
+	mode: 'development',
+	devtool: 'cheap-module-source-map',
+	*/
 	mode: 'production',
 	entry: {
 		background: './src/background.js',
