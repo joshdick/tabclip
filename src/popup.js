@@ -1,20 +1,23 @@
 require('bootstrap-css-only/css/bootstrap.min.css')
-
 const shared = require('./shared')
 
 const alert = document.querySelector('#alert')
 const copyButton = document.querySelector('#copyButton')
 const pasteButton = document.querySelector('#pasteButton')
-const currentWindowRadio = document.querySelector('#currentWindow')
-const allWindowsRadio = document.querySelector('#allWindows')
 const includeTitlesCheckbox = document.querySelector('#includeTitles')
+const backgroundPasteCheckbox = document.querySelector('#backgroundPaste')
 
-currentWindowRadio.onclick = (e) => shared.savePref(shared.PREFERENCE_NAMES.COPY_SCOPE, e.target.id)
-allWindowsRadio.onclick = (e) => shared.savePref(shared.PREFERENCE_NAMES.COPY_SCOPE, e.target.id)
-includeTitlesCheckbox.onclick = (e) => shared.savePref(shared.PREFERENCE_NAMES.INCLUDE_TITLES, e.target.checked)
-shared.getPrefs().then(({ copyScope, includeTitles }) => {
-	document.querySelector(`#${copyScope}`).checked = true
-	includeTitlesCheckbox.checked = includeTitles
+// Waiting for DOMContentLoaded allows webextension-polyfill to load
+document.addEventListener('DOMContentLoaded', () => {
+	shared.getPrefs().then(({
+		[shared.PREFERENCE_NAMES.COPY_SCOPE]: copyScope,
+		[shared.PREFERENCE_NAMES.INCLUDE_TITLES]: includeTitles,
+		[shared.PREFERENCE_NAMES.BACKGROUND_PASTE]: backgroundPaste
+	}) => {
+		if (copyScope) document.querySelector(`#${copyScope}`).checked = true
+		includeTitlesCheckbox.checked = !!includeTitles
+		backgroundPasteCheckbox.checked = !!backgroundPaste
+	})
 })
 
 const showAlert = (quantity, operation) => {
@@ -38,7 +41,7 @@ const showAlert = (quantity, operation) => {
 
 copyButton.onclick = () => {
 	const currentWindow = document.querySelector('input[name="copyScope"]:checked').value === 'current'
-	const includeTitles = document.querySelector('#includeTitles').checked
+	const includeTitles = includeTitlesCheckbox.checked
 	shared.copyTabs(currentWindow, includeTitles)
 		.then(tabCount => {
 			showAlert(tabCount, shared.ALERT_OPERATIONS.COPY)
@@ -46,8 +49,22 @@ copyButton.onclick = () => {
 }
 
 pasteButton.onclick = () => {
-	shared.pasteTabs()
+	const inBackground = backgroundPasteCheckbox.checked
+	shared.pasteTabs(inBackground)
 		.then(tabCount => {
 			showAlert(tabCount, shared.ALERT_OPERATIONS.PASTE)
 		})
 }
+
+backgroundPasteCheckbox.onchange = () => {
+	shared.savePref(shared.PREFERENCE_NAMES.BACKGROUND_PASTE, backgroundPasteCheckbox.checked)
+}
+
+includeTitlesCheckbox.onchange = () => {
+	shared.savePref(shared.PREFERENCE_NAMES.INCLUDE_TITLES, includeTitlesCheckbox.checked)
+}
+
+document.querySelectorAll('input[name="copyScope"]')
+	.forEach(radioButton => radioButton.onchange = (event) => {
+		shared.savePref(shared.PREFERENCE_NAMES.COPY_SCOPE, event.target.id)
+	})

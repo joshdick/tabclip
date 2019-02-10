@@ -1,17 +1,8 @@
-const getUrls = require('get-urls')
 const browser = require('webextension-polyfill')
+const urlRegex = require('url-regex')
 
 const clipboardBridge = document.querySelector('#clipboardBridge')
 clipboardBridge.contentEditable = true
-
-// Options for [normalize-url](https://github.com/sindresorhus/normalize-url)
-// passed through by [get-urls](https://github.com/sindresorhus/get-urls)
-const NORMALIZE_URL_OPTIONS = Object.freeze({
-	removeTrailingSlash: false,
-	sortQueryParameters: false,
-	stripFragment: false,
-	stripWWW: false
-})
 
 const ALERT_OPERATIONS = Object.freeze({
 	COPY: Symbol('copy'),
@@ -71,23 +62,24 @@ const copyTabs = (currentWindow, includeTitles) => {
 	})
 }
 
-const pasteTabs = () => {
+const pasteTabs = (inBackground = false) => {
 	const input = readFromClipboard()
-	const urls = getUrls(input, NORMALIZE_URL_OPTIONS)
+	const urls = input.match(urlRegex()) || []
 	for (const url of urls) {
-		browser.tabs.create({ url })
+		browser.tabs.create({ url, active: !inBackground })
 	}
-	return Promise.resolve(urls.size)
+	return Promise.resolve(urls.length)
 }
 
 // User preferences
 
 const PREFERENCE_NAMES = Object.freeze({
+	BACKGROUND_PASTE: 'backgroundPaste',
 	COPY_SCOPE: 'copyScope',
 	INCLUDE_TITLES: 'includeTitles',
 })
 
-const storage = browser.storage.sync ? browser.storage.sync : browser.storage.local // use synchronized storage if available
+const storage = browser.storage.local
 
 const savePref = (name, value) => {
 	storage.set({
@@ -96,10 +88,11 @@ const savePref = (name, value) => {
 }
 
 const getPrefs = () => {
-	return storage.get({
-		[PREFERENCE_NAMES.COPY_SCOPE]: 'currentWindow',
-		[PREFERENCE_NAMES.INCLUDE_TITLES]: false,
-	})
+	return storage.get([
+		PREFERENCE_NAMES.BACKGROUND_PASTE,
+		PREFERENCE_NAMES.COPY_SCOPE,
+		PREFERENCE_NAMES.INCLUDE_TITLES
+	])
 }
 
 module.exports = {

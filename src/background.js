@@ -1,5 +1,4 @@
 const browser = require('webextension-polyfill')
-
 const shared = require('./shared')
 
 const showNotification = (quantity, operation) => {
@@ -16,20 +15,28 @@ const showNotification = (quantity, operation) => {
 
 const commandListener = (command) => {
 	if (command === 'copy-tabs') {
-		shared.getPrefs().then(({ copyScope, includeTitles }) => {
+		shared.getPrefs().then(({
+			[shared.PREFERENCE_NAMES.COPY_SCOPE]: copyScope,
+			[shared.PREFERENCE_NAMES.INCLDUE_TITLES]: includeTitles,
+		}) => {
 			shared.copyTabs(copyScope === 'currentWindow', includeTitles)
 				.then(tabCount => {
 					showNotification(tabCount, shared.ALERT_OPERATIONS.COPY)
 				})
 		})
 	} else if (command === 'paste-tabs') {
-		shared.pasteTabs()
-			.then(tabCount => {
-				showNotification(tabCount, shared.ALERT_OPERATIONS.PASTE)
-			})
+		shared.getPrefs().then(({
+			[shared.PREFERENCE_NAMES.BACKGROUND_PASTE]: inBackground,
+		}) => {
+			shared.pasteTabs(inBackground)
+				.then(tabCount => {
+					showNotification(tabCount, shared.ALERT_OPERATIONS.PASTE)
+				})
+		})
 	}
 }
 
 if (!browser.commands.onCommand.hasListener(commandListener)) {
 	browser.commands.onCommand.addListener(commandListener)
 }
+

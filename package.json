@@ -4,7 +4,7 @@
   "description": "Copy browser tabs to (or create them from) your clipboard.",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint src/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -30,18 +30,18 @@
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-solid": "^5.0.13",
-    "bootstrap-css-only": "^4.1.1",
-    "get-urls": "^7.2.0",
-    "webextension-polyfill": "^0.3.0"
+    "bootstrap-css-only": "^4.1.0",
+    "url-regex": "^4.1.1",
+    "webextension-polyfill": "^0.4.0"
   },
   "devDependencies": {
-    "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.5.2",
-    "css-loader": "^1.0.0",
-    "eslint": "^5.3.0",
-    "style-loader": "^0.21.0",
-    "webpack": "^4.16.4",
-    "webpack-cli": "^3.1.0",
+    "clean-webpack-plugin": "^1.0.0",
+    "copy-webpack-plugin": "^4.5.1",
+    "css-loader": "^2.1.0",
+    "eslint": "^5.12.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.8.2",
+    "webpack-cli": "^3.2.1",
     "zip-webpack-plugin": "^3.0.0"
   }
 }
