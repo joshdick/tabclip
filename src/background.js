@@ -19,7 +19,7 @@ const commandListener = (command) => {
 			[shared.PREFERENCE_NAMES.COPY_SCOPE]: copyScope,
 			[shared.PREFERENCE_NAMES.INCLDUE_TITLES]: includeTitles,
 		}) => {
-			shared.copyTabs(copyScope === 'currentWindow', includeTitles)
+			shared.copyTabs(copyScope !== 'allWindows', !!includeTitles)
 				.then(tabCount => {
 					showNotification(tabCount, shared.ALERT_OPERATIONS.COPY)
 				})
@@ -28,7 +28,7 @@ const commandListener = (command) => {
 		shared.getPrefs().then(({
 			[shared.PREFERENCE_NAMES.BACKGROUND_PASTE]: inBackground,
 		}) => {
-			shared.pasteTabs(inBackground)
+			shared.pasteTabs(!!inBackground)
 				.then(tabCount => {
 					showNotification(tabCount, shared.ALERT_OPERATIONS.PASTE)
 				})

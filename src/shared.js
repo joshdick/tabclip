@@ -10,20 +10,32 @@ const ALERT_OPERATIONS = Object.freeze({
 })
 
 const readFromClipboard = () => {
-	clipboardBridge.focus()
-	document.execCommand('selectAll')
-	document.execCommand('paste')
-	const result = clipboardBridge.innerText
-	clipboardBridge.innerText = ''
+	let result = ''
+	if (navigator.clipboard) {
+		result = navigator.clipboard.readText()
+	} else {
+		// Doesn't work in background pages in Firefox:
+		// https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard#Browser-specific_considerations
+		clipboardBridge.focus()
+		document.execCommand('selectAll')
+		document.execCommand('paste')
+		result = Promise.resolve(clipboardBridge.innerText)
+		clipboardBridge.innerText = ''
+	}
 	return result
 }
 
 const writeToClipboard = (text) => {
-	clipboardBridge.innerText = text
-	clipboardBridge.focus()
-	document.execCommand('selectAll')
-	document.execCommand('copy')
-	clipboardBridge.innerText = ''
+	if (navigator.clipboard) {
+		return navigator.clipboard.writeText(text)
+	} else {
+		clipboardBridge.innerText = text
+		clipboardBridge.focus()
+		document.execCommand('selectAll')
+		document.execCommand('copy')
+		clipboardBridge.innerText = ''
+		return Promise.resolve()
+	}
 }
 
 const copyTabs = (currentWindow, includeTitles) => {
@@ -57,18 +69,20 @@ const copyTabs = (currentWindow, includeTitles) => {
 					return `${tab.url}${title}`
 				}).join('\n') // Combine all tabs for one window into a string, one URL per line
 			).join('\n\n') // Combine each window's URL list, separating each list with an empty line
-		writeToClipboard(output)
-		return tabCount
+		return writeToClipboard(output).then(() => {
+			return tabCount
+		})
 	})
 }
 
 const pasteTabs = (inBackground = false) => {
-	const input = readFromClipboard()
-	const urls = input.match(urlRegex()) || []
-	for (const url of urls) {
-		browser.tabs.create({ url, active: !inBackground })
-	}
-	return Promise.resolve(urls.length)
+	return readFromClipboard().then((input) => {
+		const urls = input.match(urlRegex()) || []
+		for (const url of urls) {
+			browser.tabs.create({ url, active: !inBackground })
+		}
+		return Promise.resolve(urls.length)
+	})
 }
 
 // User preferences
