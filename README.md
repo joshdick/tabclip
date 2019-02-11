@@ -2,17 +2,17 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/joshdick/tabclip.svg)](https://greenkeeper.io/)
 
-<img src="https://raw.githubusercontent.com/joshdick/tabclip/master/assets/screenshot.png" title="Tabclip screenshot" alt="Tabclip screenshot" width="300" />
+<img src="https://raw.githubusercontent.com/joshdick/tabclip/master/assets/screenshot.png" title="Tabclip screenshot" alt="Tabclip screenshot" width="1280" />
 
 Copy browser tabs to (or create them from) your clipboard.
 
 Get the extension:
 
 <a href="https://addons.mozilla.org/en-US/firefox/addon/tabclip/">
-	<img src="https://raw.githubusercontent.com/joshdick/tabclip/master/assets/firefox.png" title="Firefox logo" alt="Firefox logo" width="200" />
+	<img src="https://raw.githubusercontent.com/joshdick/tabclip/master/assets/firefox.png" title="Firefox logo" alt="Firefox logo" width="150" />
 </a>
 <a href="https://chrome.google.com/webstore/detail/tabclip/kdmfphcdeckocjmkmkgffgehadjhmkmc">
-	<img src="https://raw.githubusercontent.com/joshdick/tabclip/master/assets/chrome.png" title="Chrome logo" alt="Chrome logo" width="200" />
+	<img src="https://raw.githubusercontent.com/joshdick/tabclip/master/assets/chrome.png" title="Chrome logo" alt="Chrome logo" width="150" />
 </a>
 
 ## About
