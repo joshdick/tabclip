@@ -19,9 +19,9 @@ Get the extension:
 
 Tabclip is a web browser extension for Mozilla Firefox and Google Chrome that allows you to copy browser tabs to (or create them from) your clipboard.
 
-The "Copy" button (and associated options) copy tab URLs to your clipboard.
+The "Copy" button, or keyboard shortcut CTRL+SHIFT+C by default, copies tab URLs to your clipboard.
 
-The "Paste" button attempts to find all URLs that appear in your clipboard, then opens each URL in a new browser tab.
+The "Paste" button, or keyboard shortcut CTRL+SHIFT+V by default, attempts to find all URLs that appear in your clipboard, then opens each URL in a new browser tab.
 
 That's it!
 
