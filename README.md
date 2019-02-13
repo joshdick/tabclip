@@ -31,11 +31,6 @@ If you have suggestions or bug reports for tabclip, I am much more likely to see
 
 I'd like to keep this extension as simple and minimal as possible, so most feature requests are not likely to be honored.
 
-## Version History
-
-* 1.0.0 - 05/13/18
-	* Initial release.
-
 ## Development
 
 To build tabclip for both Firefox and Chrome, install the latest versions of NodeJS and `npm`, then do the following:
