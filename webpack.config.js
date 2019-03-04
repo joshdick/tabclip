@@ -41,7 +41,7 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new CleanWebpackPlugin(['dist']),
+		new CleanWebpackPlugin(),
 		new CopyWebpackPlugin(['manifest*.json', '*.htm', 'img/*png' ], { context: 'src' }),
 		new ZipPlugin(zipPluginConfig)
 	]
