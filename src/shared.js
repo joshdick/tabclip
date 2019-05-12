@@ -11,21 +11,23 @@ const ALERT_OPERATIONS = Object.freeze({
 
 const readFromClipboard = async () => {
 	let result = ''
-	if (navigator.clipboard) {
-		try {
-			result = await navigator.clipboard.readText()
-			return result
-		} catch (error) {
-			// Throw away the error (Chrome); try the old-fashioned way below instead
-		}
-	}
-	// Doesn't work in background pages in Firefox, but currently works in Chrome:
-	// https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard#Browser-specific_considerations
+
 	clipboardBridge.focus()
 	document.execCommand('selectAll')
 	document.execCommand('paste')
 	result = clipboardBridge.innerText
 	clipboardBridge.innerText = ''
+
+	if (!result && navigator.clipboard) {
+		try {
+			// Can cause Chrome to block without throwing an error,
+			// so try it only after attempting the method above
+			result = await navigator.clipboard.readText()
+		} catch (error) {
+			// Disregard any error
+		}
+	}
+
 	return result
 }
 
@@ -35,9 +37,10 @@ const writeToClipboard = async (text) => {
 			await navigator.clipboard.writeText(text)
 			return
 		} catch (error) {
-			// Throw away the error (Chrome); try the old-fashioned way below instead
+			// Disregard any error; try alternate method below
 		}
 	}
+
 	clipboardBridge.innerText = text
 	clipboardBridge.focus()
 	document.execCommand('selectAll')
