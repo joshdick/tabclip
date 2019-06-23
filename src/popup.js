@@ -32,9 +32,11 @@ const showAlert = async (quantity, operation) => {
 	alert.innerText = `${verb} ${quantity} URL${quantity === 1 ? '' : 's'}.`
 	const className = 'show'
 	alert.classList.add(className)
-	await (() => new Promise(resolve => setTimeout(resolve, 3000)))()
-	alert.classList.remove(className)
-	alert.innerText = ''
+	await new Promise(resolve => setTimeout(resolve, 3000))
+		.then(() => {
+			alert.classList.remove(className)
+			alert.innerText = ''
+		})
 }
 
 copyButton.onclick = async () => {
