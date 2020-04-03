@@ -1,7 +1,5 @@
 # tabclip
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/joshdick/tabclip.svg)](https://greenkeeper.io/)
-
 <img src="https://raw.githubusercontent.com/joshdick/tabclip/master/assets/screenshot.png" title="Tabclip screenshot" alt="Tabclip screenshot" width="1280" />
 
 Copy browser tabs to (or create them from) your clipboard.
