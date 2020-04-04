@@ -30,7 +30,7 @@
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-solid": "^5.0.13",
-    "bootstrap-css-only": "^4.3.1",
+    "bootstrap-css-only": "^4.4.1",
     "url-regex": "^5.0.0",
     "webextension-polyfill": "^0.6.0"
   },
