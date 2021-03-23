@@ -42,7 +42,13 @@ module.exports = {
 	},
 	plugins: [
 		new CleanWebpackPlugin(),
-		new CopyWebpackPlugin(['manifest*.json', '*.htm', 'img/*png' ], { context: 'src' }),
+		new CopyWebpackPlugin({
+			patterns: [
+				{ from: 'manifest*.json', context: 'src' },
+				{ from: '*.htm', context: 'src' },
+				{ from: 'img/*png', context: 'src' }
+			]
+		}),
 		new ZipPlugin(zipPluginConfig)
 	]
 }

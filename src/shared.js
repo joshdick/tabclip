@@ -1,5 +1,5 @@
 const browser = require('webextension-polyfill')
-const urlRegex = require('url-regex')
+const urlRegex = require('url-regex-safe')
 
 const clipboardBridge = document.querySelector('#clipboardBridge')
 clipboardBridge.contentEditable = true
