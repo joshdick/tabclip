@@ -6,7 +6,7 @@ Copy browser tabs to (or create them from) your clipboard.
 
 Get the extension:
 
-<a href="https://addons.mozilla.org/en-US/firefox/addon/tabclip/">
+<a href="https://addons.mozilla.org/firefox/addon/tabclip/">
 	<img src="https://raw.githubusercontent.com/joshdick/tabclip/master/assets/firefox.png" title="Firefox logo" alt="Firefox logo" width="150" />
 </a>
 <a href="https://chrome.google.com/webstore/detail/tabclip/kdmfphcdeckocjmkmkgffgehadjhmkmc">
