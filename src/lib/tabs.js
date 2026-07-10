@@ -38,7 +38,7 @@ export const copyTabs = async (currentWindow, includeTitles, writeToClipboard) =
 
 export const pasteTabs = async (inBackground = false, readFromClipboard) => {
 	const input = await readFromClipboard()
-	const urls = input.match(urlRegex()) || []
+	const urls = (input || '').match(urlRegex()) || []
 	for (const url of urls) {
 		browser.tabs.create({ url, active: !inBackground })
 	}

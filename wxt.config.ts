@@ -44,7 +44,10 @@ export default defineConfig({
 		},
 		permissions: [
 			'clipboardRead', 'clipboardWrite', 'notifications', 'storage', 'tabs',
-			...(browser === 'chrome' ? ['offscreen'] : []),
+			// Must match the runtime's `import.meta.env.FIREFOX` check in
+			// src/entrypoints/background.js, which picks the offscreen-document
+			// clipboard client for every non-Firefox browser, not just Chrome.
+			...(browser !== 'firefox' ? ['offscreen'] : []),
 		],
 		...(browser === 'firefox' ? {
 			browser_specific_settings: {

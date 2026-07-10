@@ -6,6 +6,10 @@ export const createClipboardBridge = () => {
 	document.body.appendChild(clipboardBridge)
 
 	const readFromClipboard = async () => {
+		// In an offscreen document, nothing is ever visibly focused by the user;
+		// requesting window focus first improves the odds that execCommand
+		// below can actually reach the system clipboard.
+		window.focus()
 		clipboardBridge.focus()
 		document.execCommand('selectAll')
 		document.execCommand('paste')
@@ -36,6 +40,7 @@ export const createClipboardBridge = () => {
 		}
 
 		clipboardBridge.innerText = text
+		window.focus()
 		clipboardBridge.focus()
 		document.execCommand('selectAll')
 		document.execCommand('copy')

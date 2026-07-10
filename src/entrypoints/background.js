@@ -42,5 +42,7 @@ export default defineBackground(() => {
 		}
 	}
 
-	browser.commands.onCommand.addListener(commandListener)
+	if (!browser.commands.onCommand.hasListener(commandListener)) {
+		browser.commands.onCommand.addListener(commandListener)
+	}
 })
