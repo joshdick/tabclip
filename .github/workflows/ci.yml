@@ -27,3 +27,8 @@ jobs:
         with:
           name: tabclip-extensions
           path: .output/*.zip
+          # .output/ is dot-prefixed, so actions/upload-artifact treats it as
+          # hidden and skips it entirely unless told otherwise. Safe here
+          # since the glob only matches the three zip archives, not arbitrary
+          # hidden content.
+          include-hidden-files: true
