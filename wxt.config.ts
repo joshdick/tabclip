@@ -11,6 +11,14 @@ export default defineConfig({
 	suppressWarnings: {
 		firefoxDataCollection: true,
 	},
+	zip: {
+		// WXT's sources zip (submitted to AMO for review) only excludes
+		// node_modules, dotfiles, test files, and the output dir by default -
+		// it doesn't consult .gitignore, so these have to be listed explicitly.
+		// assets/ is README-only marketing/screenshot images, and untracked/ is
+		// local scratch content that isn't even committed to git.
+		excludeSources: ['assets/**', 'untracked/**'],
+	},
 	manifest: ({ browser }) => ({
 		name: 'tabclip',
 		description: 'Copy browser tabs to (or create them from) your clipboard.',
