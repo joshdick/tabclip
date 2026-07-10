@@ -11,8 +11,11 @@ const ensureOffscreenDocument = async () => {
 			justification: 'Read/write the clipboard for the copy-tabs/paste-tabs keyboard shortcuts',
 		})
 	}
-	await creating
-	creating = undefined
+	try {
+		await creating
+	} finally {
+		creating = undefined
+	}
 }
 
 export const createOffscreenClipboardClient = () => ({
