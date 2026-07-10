@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run zip
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: tabclip-extensions
+          path: .output/*.zip
+          # .output/ is dot-prefixed, so actions/upload-artifact treats it as
+          # hidden and skips it entirely unless told otherwise. Safe here
+          # since the glob only matches the three zip archives, not arbitrary
+          # hidden content.
+          include-hidden-files: true
