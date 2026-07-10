@@ -1,10 +1,16 @@
 {
   "name": "tabclip",
-  "version": "1.0.0",
+  "version": "1.5",
   "description": "Copy browser tabs to (or create them from) your clipboard.",
   "private": true,
+  "type": "module",
   "scripts": {
-    "test": "eslint src/**/*.js"
+    "lint": "eslint .",
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build && wxt build -b firefox",
+    "zip": "wxt zip && wxt zip -b firefox",
+    "postinstall": "wxt prepare"
   },
   "repository": {
     "type": "git",
@@ -28,20 +34,16 @@
   },
   "homepage": "https://joshdick.github.io/tabclip",
   "dependencies": {
-    "@fortawesome/fontawesome": "^1.1.8",
-    "@fortawesome/fontawesome-free-solid": "^5.0.13",
+    "@fortawesome/fontawesome-svg-core": "^7.3.0",
+    "@fortawesome/free-solid-svg-icons": "^7.3.0",
     "bootstrap-css-only": "^4.4.1",
-    "url-regex-safe": "^2.0.2",
-    "webextension-polyfill": "^0.7.0"
+    "url-regex-safe": "^4.0.0",
+    "webextension-polyfill": "^0.12.0"
   },
   "devDependencies": {
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^8.1.0",
-    "css-loader": "^5.1.3",
-    "eslint": "^7.22.0",
-    "style-loader": "^2.0.0",
-    "webpack": "^5.27.2",
-    "webpack-cli": "^4.5.0",
-    "zip-webpack-plugin": "^4.0.1"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.6.0",
+    "globals": "^17.7.0",
+    "wxt": "^0.20.27"
   }
 }

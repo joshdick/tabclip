@@ -12,10 +12,6 @@
 				min-width: 225px;
 				padding: 10px;
 			}
-			#clipboardBridge {
-				position: absolute;
-				top: -1000px;
-			}
 			#alert {
 				color: rgb(40, 167, 69);
 				padding-top: 10px;
@@ -35,12 +31,8 @@
 			}
 		</style>
 
-		<script src="./fonts.bundle.js"></script>
-
 	</head>
 	<body>
-
-		<div id="clipboardBridge"></div>
 
 		<form>
 			Window(s):&nbsp;
@@ -69,7 +61,7 @@
 			<span id="alert"></span>
 		</form>
 
-		<script src="./popup.bundle.js"></script>
+		<script type="module" src="./main.js"></script>
 
 	</body>
 </html>

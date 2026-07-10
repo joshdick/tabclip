@@ -37,10 +37,12 @@ To build tabclip for both Firefox and Chrome, install the latest versions of Nod
 git clone https://github.com/joshdick/tabclip.git
 cd tabclip
 npm install
-npx webpack
+npm run build
 ```
 
-The build will create a `tabclip.zip` extension archive in the `dist/` directory.
+The build will create unpacked extensions in `.output/chrome-mv3/` and `.output/firefox-mv3/`. Run `npm run zip` to also produce `.output/tabclip-<version>-chrome.zip` and `.output/tabclip-<version>-firefox.zip` extension archives (plus a `tabclip-<version>-sources.zip`, since Firefox's AMO review requires source code alongside the bundled/minified Firefox submission).
+
+For local development with hot reloading, use `npm run dev` (Chrome) or `npm run dev:firefox` (Firefox).
 
 ## Attribution
 
